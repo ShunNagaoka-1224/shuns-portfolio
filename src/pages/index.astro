@@ -4,7 +4,43 @@ import AboutMe, { frontmatter } from './about_me_final.md';
 ---
 
 <Layout title={frontmatter.title || "Shun Nagaoka"}>
+  <!-- 既存の研究実績サイトへのリンクバナー -->
+  <nav class="sub-nav">
+    <a href="https://shunnagaoka-1224.github.io/" target="_blank" rel="noopener noreferrer" class="link-card">
+      <span class="label">研究実績・ポートフォリオ</span>
+      <span class="desc">→ 既存のオリジナルサイトを見る</span>
+    </a>
+  </nav>
+
   <article class="markdown-body">
     <AboutMe />
   </article>
 </Layout>
+
+<style>
+  .sub-nav {
+    margin: 1rem 0 2rem 0;
+  }
+  .link-card {
+    display: block;
+    padding: 1rem;
+    background: #f5f5f7;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #e1e1e8;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .link-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .label {
+    font-weight: bold;
+    display: block;
+  }
+  .desc {
+    font-size: 0.85rem;
+    color: #666;
+  }
+</style>
