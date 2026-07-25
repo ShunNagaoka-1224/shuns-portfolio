@@ -1,4 +1,5 @@
 ---
+import Header from '../components/Header.astro';
 import '../styles/style.css';
 const { title = "Shun Nagaoka | Portfolio" } = Astro.props;
 ---
@@ -11,9 +12,18 @@ const { title = "Shun Nagaoka | Portfolio" } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <main>
+    <Header />
+    <main class="main-container">
       <slot />
     </main>
     <script src="/scripts/main.js" is:inline></script>
   </body>
 </html>
+
+<style>
+  .main-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem 1.5rem;
+  }
+</style>

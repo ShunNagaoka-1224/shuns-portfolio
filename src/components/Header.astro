@@ -1,0 +1,60 @@
+---
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href={`${baseUrl}/`} class="site-title">Shun Nagaoka</a>
+    <nav class="site-nav">
+      <a href={`${baseUrl}/`}>About</a>
+      <a href={`${baseUrl}/notes`}>Notes</a>
+      <a href="https://shunnagaoka-1224.github.io/" target="_blank" rel="noopener noreferrer" class="ext-link">
+        Research ↗
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid #e5e5e5;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+  }
+  .header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .site-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #1d1d1f;
+    text-decoration: none;
+  }
+  .site-nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .site-nav a {
+    color: #515154;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  .site-nav a:hover {
+    color: #0066cc;
+  }
+  .ext-link {
+    color: #86868b !important;
+  }
+</style>

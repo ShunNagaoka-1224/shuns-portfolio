@@ -1,0 +1,155 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map((note) => ({
+    params: { slug: note.id },
+    props: { note },
+  }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+---
+
+<Layout title={`${note.data.title} | Shun Nagaoka`}>
+  <main class="note-container">
+    <a href="/notes" class="back-link">&larr; Notes 一覧へ戻る</a>
+
+    <article class="note-detail">
+      <header class="note-header">
+        <div class="meta">
+          {note.data.category && <span class="badge">{note.data.category}</span>}
+          <time>{note.data.date}</time>
+        </div>
+        <h1 class="title">{note.data.title}</h1>
+        {note.data.description && <p class="description">{note.data.description}</p>}
+        {note.data.tags && (
+          <div class="tags">
+            {note.data.tags.map((tag: string) => (
+              <span class="tag">#{tag}</span>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <hr class="divider" />
+
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .note-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .back-link:hover {
+    color: #000;
+  }
+
+  .note-header {
+    margin-bottom: 2rem;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  .badge {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    color: #111;
+  }
+
+  .description {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .tags {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    color: #888;
+    font-size: 0.85rem;
+  }
+
+  .divider {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 2rem 0;
+  }
+
+  /* マークダウン本文のスタイリング */
+  .prose {
+    line-height: 1.8;
+    color: #24292e;
+  }
+
+  .prose :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .prose :global(p) {
+    margin-bottom: 1.25rem;
+  }
+
+  .prose :global(ul) {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 0.4rem;
+  }
+
+  .prose :global(code) {
+    background-color: #f3f4f6;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+</style>

@@ -5,18 +5,18 @@ body {
     line-height: 1.6; 
     color: #333; 
     margin: 0;
-    padding-top: 60px; 
+    padding: 0; /* 60px を削除 */
 }
 
 /* 見出しのスタイル */
 h1, h2 {
-    color: #0056b3; /* 見出しの色を青系に */
+    color: #0056b3;
 }
 
 /* リンクのスタイル */
 a {
     color: #007bff;
-    text-decoration: none; /* 下線を消す */
+    text-decoration: none;
 }
 
 /* フッターのスタイル */
@@ -25,128 +25,40 @@ footer {
     margin-top: 30px;
     font-size: 0.9em;
     color: #777;
+    padding: 30px 0;
 }
 
-header {
-    background-color: #333; /* 背景色を濃いグレーに */
-    width: 100%;
-    top: 0;
-    position: fixed; /* 要素をビューポートに固定 */
-    top: 0; /* 上端に配置 */
-    z-index: 1000;
-    padding: 0 20px; /* 左右に余白を追加 */
-    box-sizing: border-box; /* paddingを幅に含める */
-}
-
-.navbar-container {
-    display: flex;
-    justify-content: space-between; /* 両端に配置 */
-    align-items: center; /* 上下中央揃え */
-    max-width: 1200px; /* コンテンツ幅の最大 */
-    margin: 0 auto; /* 中央揃え */
-    height: 60px; /* ヘッダーの高さを指定 */
-}
-
-.logo {
-    font-size: 1.4em; /* 17px * 1.4 = 約24px */
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.hamburger-menu {
-    display: none; /* デスクトップでは非表示 */
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 48px;
-    height: 48px;
-    position: relative;
-}
-
-.hamburger-line {
-    position: absolute;
-    left: 11px;
-    width: 26px;
-    height: 2px;
-    background-color: white;
-    transition: all .5s cubic-bezier(0.075, 0.82, 0.165, 1);
-    transition: all .8s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-.hamburger-line:nth-of-type(1) {
-    top: 14px;
-}
-.hamburger-line:nth-of-type(2) {
-    top: 23px;
-}
-.hamburger-line:nth-of-type(3) {
-    top: 32px;
-}
-
-/* メニューオープン時のアニメーション */
-.hamburger-menu.active .hamburger-line:nth-of-type(1) {
-    transform: translateY(9px) rotate(45deg);
-}
-.hamburger-menu.active .hamburger-line:nth-of-type(2) {
-    opacity: 0;
-}
-.hamburger-menu.active .hamburger-line:nth-of-type(3) {
-    transform: translateY(-9px) rotate(-45deg);
-}
+/* ----------------------------------------------------
+   【削除箇所】
+   旧ヘッダー用スタイルの header, .navbar-container, 
+   .logo, .hamburger-menu 等は Header.astro 側で個別に
+   定義されているため、ここでは無効化します。
+---------------------------------------------------- */
 
 .print-button {
     background: none;
     border: none;
     color: white;
-    font-size: 1.5rem; /* 他のメニューとサイズ感を合わせる */
+    font-size: 1.5rem;
     cursor: pointer;
     transition: color 0.3s ease;
-    padding: 5px 10px; /* リンクのクリック範囲を広げ、見た目の余白も確保 */
-    border-radius: 20px; /* 角を丸くして柔らかい印象に */
+    padding: 5px 10px;
+    border-radius: 20px;
 }
 .print-button:hover {
-    color: #333; /* ホバー時の色 */
+    color: #333;
     background-color: white;
 }
 
 .header-right {
     display: flex;
     align-items: center;
-    gap: 15px; /* メニューと印刷ボタンの間の隙間 */
-}
-
-nav ul {
-    list-style: none; /*箇条書きの点を消す*/
-    margin: 0;
-    padding: 0;
-    display: flex; /* Flexboxを有効化 */
-    align-items: center; /* 垂直方向の中央揃え */
-}
-
-nav ul li {
-    /* display: inline-block; は不要になるので削除 */
-    margin: 0 5px; /* li自体のマージンは少し減らす */
-}
-
-nav ul li a {
-    color: white; /*文字色を白に*/
-    text-decoration: none;
-    font-size: 1.4rem; /* bodyのフォントサイズと同じ (17px) */
-    padding: 8px 16px; /* リンクのクリック範囲を広げ、見た目の余白も確保 */
-    border-radius: 20px; /* 角を丸くして柔らかい印象に */
-    transition: all 0.3s ease; /* 色と背景色の変化を滑らかに */
-}
-
-nav ul li a:hover {
-    background-color: white; /* マウスを乗せたら背景色を変える */
-    color: black; /* 文字色は白のまま */
+    gap: 15px;
 }
 
 .lang-switcher a {
     border: 1px solid white;
-    padding: 4px 10px; /* paddingを少し調整 */
+    padding: 4px 10px;
     border-radius: 5px;
     color:white
 }
@@ -155,14 +67,9 @@ nav ul li a:hover {
     color: #333;
 }
 
-footer {
-    text-align: center;
-    padding: 30px 0;
-}
-
 .social-icons a {
     color: #333;
-    font-size: 3rem; /* 15px * 1.8 = 27px */
+    font-size: 3rem;
     margin: 0 10px;
     transition: color 0.3s, transform 0.3s;
     display: inline-block;
@@ -175,44 +82,40 @@ footer {
 
 footer p {
     margin-top: 15px;
-    font-size: 0.9rem; /* 約15.3px */
+    font-size: 0.9rem;
     color: #6c757d;
 }
 
-main {
-    max-width: 960px; /* コンテンツの最大幅 */
-    margin: 20px auto; /* 上下に20px、左右は自動で中央配置 */
-    padding: 20px; /* 内側の余白 */
-    background-color: white; /* コンテンツエリアの背景色 */
-    box-sizing: border-box; /* paddingを含めて幅を計算する */
-}
+/* ----------------------------------------------------
+   【削除箇所】
+   main { ... } の指定も各ページ（Index/Notes/Slug）側で
+   レイアウト管理するため、ここからは削除・無効化します。
+---------------------------------------------------- */
 
 .profile-container {
     display: flex;
-    align-items: flex-start; /* 上揃えで配置 */
-    gap: 30px; /* 写真とテキストの間の余白 */
+    align-items: flex-start;
+    gap: 30px;
 }
 
 .profile-photo {
-    flex: 1; /* 比率で幅を指定 */
-    max-width: 300px; /* 写真の最大幅 */
+    flex: 1;
+    max-width: 300px;
 }
 
 .profile-photo img {
     width: 100%;
     height: auto;
-    border-radius: 15px; /* 角を少し丸くします */
     border-radius: 15px;
-    outline-offset: -10px; /* 負の値で内側にオフセット */
-    transition: transform 0.3s ease-in-out; /* アニメーションを滑らかにします */
+    outline-offset: -10px;
+    transition: transform 0.3s ease-in-out;
 }
 
 .profile-details {
-    flex: 2; /* 写真に対して2倍の幅をとる */
+    flex: 2;
 }
 
 .profile-photo img:hover {
-    transform: scale(1.05); /* マウスを乗せると少し大きくなります */
     transform: scale(1.05);
     outline-color: rgba(0,0,0,0.2);
 }
@@ -248,9 +151,6 @@ main {
     object-fit: cover;
     border-radius: 8px;
 }
-.work-details {
-    flex: 1;
-}
 
 .work-details {
     flex: 1;
@@ -272,10 +172,9 @@ main {
 .news-list li time, .news-list-home li time {
     margin-right: 20px;
     color: #666;
-    flex-shrink: 0; /* 日付が改行されないように */
+    flex-shrink: 0;
 }
 
-/* トップページのニュースリストは3件まで表示 */
 .news-list-home li:nth-child(n+4) {
     display: none;
 }
@@ -301,61 +200,25 @@ main {
     font-weight: bold;
     margin-right: 1em;
 }
+
 /* --- PC表示のスタイル --- */
 @media (min-width: 769px) {
     .profile-photo {
-        position: sticky; /* スクロールに追従させる */
-        top: 80px; /* ヘッダーの高さ(60px) + 少し余白(20px) */
-        align-self: flex-start; /* コンテナの上端に配置 */
+        position: sticky;
+        top: 80px;
+        align-self: flex-start;
     }
 }
 
-.work-details {
-    flex: 1;
-}
 /* --- レスポンシブ対応 --- */
 @media (max-width: 768px) {
-    .hamburger-menu {
-        display: block; /* スマホサイズで表示 */
-        z-index: 101; /* メニューより手前に表示 */
-        position: relative;
-    }
-
-    nav ul {
-        position: absolute;
-        top: 60px; /* ヘッダーの高さ分下にずらす */
-        left: 0;
-        width: 100%;
-        background-color: #333; /* ヘッダーと同じ背景色 */
-        flex-direction: column;
-        padding: 0; /* paddingは開閉アニメーション後に適用 */
-        max-height: 0; /* 初期状態では高さを0にして隠す */
-        overflow: hidden; /* はみ出たコンテンツを隠す */
-        transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; /* 高さとpaddingをアニメーション */
-    }
-
-    nav ul.show {
-        max-height: 500px; /* メニューの最大高さを設定（コンテンツに合わせて調整） */
-        padding: 10px 0; /* 開いたときにpaddingを適用 */
-    }
-
-    nav ul li {
-        margin: 10px 0; /* 上下のマージンを調整 */
-        width: 100%;
-        text-align: center;
-    }
-
-    nav ul li a {
-        font-size: 1.5rem;
-    }
-
     .profile-container {
-        flex-direction: column; /* 縦並びにする */
-        align-items: center; /* 中央揃え */
+        flex-direction: column;
+        align-items: center;
     }
 
     .lang-switcher {
-        display: none; /* スマホサイズでは言語切り替えを非表示 */
+        display: none;
     }
     .work-item {
         flex-direction: column;
@@ -363,7 +226,7 @@ main {
     }
 
     .work-image {
-        width: 100%; /* 画面幅に合わせる */
-        max-width: 300px; /* 最大幅を指定 */
+        width: 100%;
+        max-width: 300px;
     }
 }
