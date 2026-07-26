@@ -12,11 +12,12 @@ export async function getStaticPaths() {
 
 const { note } = Astro.props;
 const { Content } = await render(note);
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Layout title={`${note.data.title} | Shun Nagaoka`}>
   <main class="note-container">
-    <a href="/notes" class="back-link">&larr; Notes 一覧へ戻る</a>
+    <a href={`${baseUrl}/notes`} class="back-link">&larr; Notes 一覧へ戻る</a>
 
     <article class="note-detail">
       <header class="note-header">
