@@ -1,3 +1,12 @@
+<div style="text-align: center; margin-bottom: 2rem;">
+  <img 
+    src="/shuns-portfolio/images/about/me_at_cat_cafe.jpg" 
+    alt="Shun Nagaoka" 
+    style="max-width: 320px; width: 100%; height: auto; border-radius: 12px; margin: 0 auto;" 
+  />
+</div>
+
+
 # About Me
 
 ## ─ Human Understanding & Experience Design ─
