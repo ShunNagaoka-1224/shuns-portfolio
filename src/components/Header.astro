@@ -8,18 +8,51 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     <nav class="site-nav">
       <a href={`${baseUrl}/`}>About</a>
       <a href={`${baseUrl}/notes`}>Notes</a>
-      <a href={`${baseUrl}/gallery`}>Gallery</a> <!-- 👈 ここに追加 -->
+      <a href={`${baseUrl}/gallery`}>Gallery</a>
       <a href="https://shunnagaoka-1224.github.io/" target="_blank" rel="noopener noreferrer" class="ext-link">
         Research ↗
       </a>
+      
+      {/* 🌙/☀️ テーマ切替ボタン（Google Icon版） */}
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode">
+        <span id="theme-icon" class="material-symbols-outlined">dark_mode</span>
+      </button>
     </nav>
   </div>
 </header>
 
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon'); // 👈 アイコンを取得
+  
+  const currentTheme = localStorage.getItem('theme') || 
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+  // 初期ロード時のアイコンとテーマ設定
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    if (themeIcon) themeIcon.textContent = 'light_mode'; // ダークモードなら太陽に
+  }
+
+  themeToggle?.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // 👈 クリック時にアイコンのテキストを切り替え
+    if (themeIcon) {
+      themeIcon.textContent = newTheme === 'dark' ? 'light_mode' : 'dark_mode';
+    }
+  });
+</script>
+
 <style>
+  /* 既存の Header.astro のスタイルに以下を反映・上書きしてください */
   .site-header {
-    border-bottom: 1px solid #e5e5e5;
-    background: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid var(--border-color); /* バグ修正：CSS変数化 */
+    background: var(--header-bg); /* バグ修正：CSS変数化 */
     backdrop-filter: blur(8px);
     position: sticky;
     top: 0;
@@ -38,24 +71,56 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
   .site-title {
     font-weight: 700;
     font-size: 1.2rem;
-    color: #1d1d1f;
+    color: var(--text-color); /* バグ修正：CSS変数化 */
     text-decoration: none;
   }
   .site-nav {
     display: flex;
+    align-items: center; /* 縦方向の中央揃えを追加 */
     gap: 1.5rem;
   }
   .site-nav a {
-    color: #515154;
+    color: var(--text-muted); /* バグ修正：CSS変数化 */
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 500;
     transition: color 0.2s ease;
   }
   .site-nav a:hover {
-    color: #0066cc;
+    color: var(--link-color); /* バグ修正：CSS変数化 */
   }
   .ext-link {
-    color: #86868b !important;
+    color: var(--text-muted) !important;
   }
+
+  /* 🛠️ ボタンのスタイリング */
+  .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color) !important; /* 👈 テキストカラーを強制適用 */
+    padding: 6px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .icon-btn:hover {
+    background-color: var(--border-color);
+  }
+
+  /* 🖼️ Google Icon 自体の色とサイズ指定 */
+  .material-symbols-outlined {
+    font-size: 20px;
+    color: var(--text-color) !important; /* 👈 アイコン本体の色も var(--text-color) に固定 */
+    display: inline-block;
+    line-height: 1;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  }
+
+  /* 表示の出し分け制御 */
+  :global([data-theme="dark"]) .moon-icon { display: none !important; }
+  :global(:not([data-theme="dark"])) .sun-icon { display: none !important; }
 </style>
