@@ -252,3 +252,58 @@ footer p {
         max-width: 300px;
     }
 }
+
+/* ====================================================
+   Markdown（Notes本文）のダークモード・スタイル対応
+==================================================== */
+.markdown-body {
+    color: var(--text-color);
+}
+
+.markdown-body p,
+.markdown-body li,
+.markdown-body span,
+.markdown-body table {
+    color: var(--text-color);
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4 {
+    color: var(--heading-color);
+    border-bottom-color: var(--border-color);
+}
+
+.markdown-body hr {
+    background-color: var(--border-color);
+    border: none;
+    height: 1px;
+}
+
+/* インラインコード（enum や pressedFor などの小さな枠） */
+.markdown-body code {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+}
+
+/* コードブロック全体 */
+.markdown-body pre {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.markdown-body pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* 引用（blockquote） */
+.markdown-body blockquote {
+    color: var(--text-muted);
+    border-left: 4px solid var(--border-color);
+}
