@@ -1,0 +1,120 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// 1. public/images/gallery/ 配下の画像パスを全自動で取得
+const imageModules = import.meta.glob(
+  '/public/images/gallery/*.{jpeg,jpg,png,gif,webp}',
+  { eager: true }
+);
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// 2. 表示用の配列データに変換（public/ プレフィックスを削ってベースパスを付与）
+const photos = Object.keys(imageModules).map((path) => {
+  const fileName = path.split('/').pop()?.split('.')[0] || '';
+  // /public/images/gallery/xxx.jpg -> /images/gallery/xxx.jpg に変換
+  const publicPath = path.replace('/public', '');
+  
+  return {
+    src: `${baseUrl}${publicPath}`,
+    title: fileName.replace(/_/g, ' '), // アンダースコアをスペースに変換
+  };
+});
+---
+
+<Layout title="Gallery | Shun Nagaoka">
+  <main class="gallery-container">
+    <header class="page-header">
+      <h1>Gallery</h1>
+      <p class="subtitle">いいなと思った写真を載せていくだけのページ</p>
+    </header>
+
+    <div class="gallery-grid">
+      {photos.map((photo) => (
+        <div class="gallery-card">
+          <div class="image-wrapper">
+            <img src={photo.src} alt={photo.title} loading="lazy" />
+          </div>
+          <div class="card-body">
+            <h2 class="photo-title">{photo.title}</h2>
+          </div>
+        </div>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .gallery-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  .page-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: #666;
+    font-size: 0.95rem;
+  }
+
+  /* 2〜3列のレスポンシブ・グリッドレイアウト */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gallery-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  /* 🖼️ 画像枠の高さを220pxに固定 */
+  .image-wrapper {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    background: #f5f5f5;
+  }
+
+  /* 🖼️ 枠に合わせて縦横比を崩さず自動トリミング */
+  .image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .gallery-card:hover .image-wrapper img {
+    transform: scale(1.04);
+  }
+
+  .card-body {
+    padding: 1rem 1.25rem;
+  }
+
+  .photo-title {
+    font-size: 1rem;
+    margin: 0;
+    color: #333;
+    text-transform: capitalize; /* 先頭文字を大文字にする */
+  }
+</style>
