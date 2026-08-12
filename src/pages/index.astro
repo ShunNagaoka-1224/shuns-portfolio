@@ -1,14 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import profileData from '../content/about/profile.json';
 
-// 1. content/about/ 配下のマークダウン要素を動的取得
-const philosophyEntry = await getEntry('about', 'philosophy');
-const technicalEntry = await getEntry('about', 'technical_execution');
+// 1. content/about/ 配下のマークダウン全要素を取得
+const aboutEntries = await getCollection('about');
 
-const { Content: PhilosophyContent } = philosophyEntry ? await philosophyEntry.render() : { Content: null };
-const { Content: TechnicalContent } = technicalEntry ? await technicalEntry.render() : { Content: null };
+// スラッグ（id/slug）で各エントリを特定
+const philosophyEntry = aboutEntries.find((e) => e.slug === 'philosophy' || e.id === 'philosophy.md');
+const technicalEntry = aboutEntries.find((e) => e.slug === 'technical_execution' || e.id === 'technical_execution.md');
+
+const PhilosophyContent = philosophyEntry ? (await philosophyEntry.render()).Content : null;
+const TechnicalContent = technicalEntry ? (await technicalEntry.render()).Content : null;
 
 // 2. 最新の Notes 取得
 const allNotes = await getCollection('notes');
