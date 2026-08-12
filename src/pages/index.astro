@@ -1,27 +1,63 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import AboutMe, { frontmatter } from './about_me_final.md';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
+import profileData from '../content/about/profile.json';
 
-// 1. 全てのノートを取得
+// 1. content/about/ 配下のマークダウン要素を動的取得
+const philosophyEntry = await getEntry('about', 'philosophy');
+const technicalEntry = await getEntry('about', 'technical_execution');
+
+const { Content: PhilosophyContent } = philosophyEntry ? await philosophyEntry.render() : { Content: null };
+const { Content: TechnicalContent } = technicalEntry ? await technicalEntry.render() : { Content: null };
+
+// 2. 最新の Notes 取得
 const allNotes = await getCollection('notes');
-
-// 2. 日付順（新しい順）に並び替えて最新3件を取得
 const recentNotes = allNotes
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
   .slice(0, 3);
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<Layout title={frontmatter.title || "Shun Nagaoka"}>
+<Layout title="Shun Nagaoka">
   <main class="container">
-    {/* ▼ 復活：About Me の本文（Markdown）を表示 */}
+    {/* ▼ アバター画像 ＆ プロフィール（profile.json 連動） */}
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <img 
+        src={`${baseUrl}/images/about/me_at_cat_cafe.jpg`} 
+        alt={profileData.name} 
+        style="max-width: 320px; width: 100%; height: auto; border-radius: 12px; margin: 0 auto;" 
+      />
+    </div>
+
     <article class="markdown-body">
-      <AboutMe />
+      <h1 style="text-align: center;">About Me</h1>
+      <h3 style="text-align: center; color: #666; font-weight: normal; margin-bottom: 1rem;">
+        {profileData.catchphrase}
+      </h3>
+      
+      <p style="line-height: 1.8; margin-bottom: 1.5rem;">
+        {profileData.bio}
+      </p>
+
+      <div class="tags" style="justify-content: center; margin-bottom: 2rem;">
+        {profileData.tags?.map((tag: string) => (
+          <span class="tag">` {tag} `</span>
+        ))}
+      </div>
+
+      <hr style="margin: 2.5rem 0; border: none; border-top: 1px solid #eee;" />
+
+      {/* ▼ Core Philosophy (philosophy.md 連動) */}
+      {PhilosophyContent && <PhilosophyContent />}
+
+      <hr style="margin: 2.5rem 0; border: none; border-top: 1px solid #eee;" />
+
+      {/* ▼ Technical Profile (technical_execution.md 連動) */}
+      {TechnicalContent && <TechnicalContent />}
     </article>
 
-    {/* ▼ 最新ログ 3件の表示セクション */}
+    {/* ▼ 最新 Notes 3件の表示セクション */}
     <section class="latest-notes-section">
       <div class="section-header">
         <h2>Latest Notes</h2>
@@ -31,9 +67,11 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
       <div class="carousel-container">
         {recentNotes.map((note) => (
           <a href={`${baseUrl}/notes/${note.id}`} class="note-card">
-            <span class="note-date">{note.data.date}</span>
+            <span class="note-date">
+              {new Date(note.data.pubDate).toLocaleDateString('ja-JP')}
+            </span>
             <h3 class="note-title">{note.data.title}</h3>
-            <p class="note-description">{note.data.description}</p>
+            <p class="note-description">{note.data.summary || ''}</p>
             {note.data.tags && (
               <div class="tags">
                 {note.data.tags.map((tag: string) => (
@@ -49,33 +87,29 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 </Layout>
 
 <style>
+  /* (既存のスタイルをそのまま維持) */
   .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem 1.5rem;
   }
-
   .latest-notes-section {
     margin-top: 4rem;
     padding-top: 2rem;
-    border-top: 1px solid #eee; /* About Me との境目にうっすら線を入れる */
+    border-top: 1px solid #eee;
   }
-
   .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
   }
-
   .view-all {
     color: #0066cc;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
   }
-
-  /* カルーセル/グリッド構造 */
   .carousel-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -83,8 +117,6 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     overflow-x: auto;
     padding-bottom: 0.5rem;
   }
-
-  /* カードデザイン */
   .note-card {
     display: flex;
     flex-direction: column;
@@ -96,24 +128,20 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: inherit;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-
   .note-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
-
   .note-date {
     font-size: 0.8rem;
     color: #666;
     margin-bottom: 0.5rem;
   }
-
   .note-title {
     font-size: 1.05rem;
     margin: 0 0 0.5rem 0;
     line-height: 1.4;
   }
-
   .note-description {
     font-size: 0.85rem;
     color: #444;
@@ -125,13 +153,11 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
   .tags {
     display: flex;
     gap: 0.4rem;
     flex-wrap: wrap;
   }
-
   .tag {
     font-size: 0.75rem;
     background: #eef2f5;
