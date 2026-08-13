@@ -4,13 +4,16 @@ import { getCollection, render } from 'astro:content';
 import profileData from '../content/about/profile.json';
 
 // 1. content/about/ 配下のマークダウン要素を取得
-const aboutEntries = (await getCollection('about' as any)) || [];
+const rawAboutEntries = await getCollection('about' as any);
+
+// diff- で始まるレポートファイルを除外
+const aboutEntries = (rawAboutEntries || []).filter((e: any) => e.id && !e.id.startsWith('diff-'));
 
 const philosophyEntry = aboutEntries.find(
-  (e: any) => e.id === 'philosophy' || e.id === 'philosophy.md'
+  (e: any) => e.id.includes('philosophy')
 );
 const technicalEntry = aboutEntries.find(
-  (e: any) => e.id === 'technical_execution' || e.id === 'technical_execution.md'
+  (e: any) => e.id.includes('technical_execution')
 );
 
 const PhilosophyRendered = philosophyEntry ? await render(philosophyEntry as any) : null;
@@ -30,7 +33,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 <Layout title="Shun Nagaoka">
   <main class="container">
-    {/* ▼ アバター画像 ＆ プロフィール（profile.json 連動） */}
+    {/* ▼ アバター画像 ＆ プロフィール（profile.json 連動：左揃えへ変更） */}
     <div style="text-align: center; margin-bottom: 2rem;">
       <img 
         src={`${baseUrl}/images/about/me_at_cat_cafe.jpg`} 
@@ -40,8 +43,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
 
     <article class="markdown-body">
-      <h1 style="text-align: center;">About Me</h1>
-      <h3 style="text-align: center; color: #666; font-weight: normal; margin-bottom: 1rem;">
+      <h1>About Me</h1>
+      <h3 style="color: #666; font-weight: normal; margin-bottom: 1rem;">
         {profileData.catchphrase}
       </h3>
       
@@ -49,7 +52,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
         {profileData.bio}
       </p>
 
-      <div class="tags" style="justify-content: center; margin-bottom: 2rem;">
+      <div class="tags" style="justify-content: flex-start; margin-bottom: 2rem;">
         {profileData.tags?.map((tag: string) => (
           <span class="tag">` {tag} `</span>
         ))}
@@ -57,12 +60,23 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
       <hr style="margin: 2.5rem 0; border: none; border-top: 1px solid #eee;" />
 
-      {/* ▼ Core Philosophy (philosophy.md 連動) */}
+      {/* ▼ Core Philosophy (philosophy.md 連動：見出しとサブタイトルを復元) */}
+      {philosophyEntry?.data?.title && (
+        <h2>{philosophyEntry.data.title}</h2>
+      )}
+      {philosophyEntry?.data?.subtitle && (
+        <p style="color: #666; font-size: 0.95rem; margin-top: -0.5rem; margin-bottom: 1.5rem;">
+          {philosophyEntry.data.subtitle}
+        </p>
+      )}
       {PhilosophyContent && <PhilosophyContent />}
 
       <hr style="margin: 2.5rem 0; border: none; border-top: 1px solid #eee;" />
 
-      {/* ▼ Technical Profile (technical_execution.md 連動) */}
+      {/* ▼ Technical Profile (technical_execution.md 連動：見出しを復元) */}
+      {technicalEntry?.data?.title && (
+        <h2>{technicalEntry.data.title}</h2>
+      )}
       {TechnicalContent && <TechnicalContent />}
     </article>
 
@@ -96,7 +110,6 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 </Layout>
 
 <style>
-  /* (既存のスタイルをそのまま維持) */
   .container {
     max-width: 800px;
     margin: 0 auto;
