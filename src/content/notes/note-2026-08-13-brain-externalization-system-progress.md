@@ -1,5 +1,5 @@
 ---
-title: 「脳内外部化システム」開発記：Webインターフェースの構築とセキュリティ実装
+title: 「脳の外在化システム」開発記3：Webインターフェースの構築とセキュリティ実装
 pubDate: "2026-08-13"
 category: "DevLog"
 tags: ["BrainExternalization", "Astro", "WebDevelopment", "Security", "AI"]
